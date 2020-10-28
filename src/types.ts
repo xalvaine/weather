@@ -26,3 +26,9 @@ export type WeatherItem = {
     },
   ]
 }[]
+
+export type LocalStorageWeatherItem = {
+  city: string
+  timestamp: string
+  weather: WeatherItem[]
+}
