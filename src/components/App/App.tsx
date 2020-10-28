@@ -10,15 +10,17 @@ import {
 import styles from './app.module.scss'
 import Weather from '../Weather/Weather'
 import History from '../History/History'
+import { useTranslation } from 'react-i18next'
 
 const App = () => {
   const history = useHistory()
   const location = useLocation()
+  const { t } = useTranslation()
 
   return (
     <div className={styles.wrapper}>
       <PageHeader
-        title={location.pathname === `/history` ? `History` : `Weather`}
+        title={location.pathname === `/history` ? t(`History`) : t(`Weather`)}
         extra={
           <Tabs
             activeKey={
@@ -26,8 +28,8 @@ const App = () => {
             }
             onChange={(key) => history.push(key)}
           >
-            <Tabs.TabPane tab="Weather" key="/weather" />
-            <Tabs.TabPane tab="History" key="/history" />
+            <Tabs.TabPane tab={t(`Weather`)} key="/weather" />
+            <Tabs.TabPane tab={t(`History`)} key="/history" />
           </Tabs>
         }
       />
