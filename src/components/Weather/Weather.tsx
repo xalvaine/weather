@@ -14,20 +14,32 @@ interface ParamTypes {
 const capitalizeString = (string: string) =>
   string.slice(0, 1).toUpperCase() + string.slice(1)
 
+const saveHistory = (city: City) => {
+  const key = `history`
+  try {
+    const tmpArray = JSON.parse(localStorage.getItem(key) as string)
+    tmpArray.unshift(city)
+    localStorage.setItem(key, JSON.stringify(Array.from(new Set(tmpArray))))
+  } catch {
+    localStorage.setItem(key, JSON.stringify([city]))
+  }
+}
+
 const Weather = () => {
   const history = useHistory()
   const { city } = useParams<ParamTypes>()
   const [weather, setWeather] = useState<WeatherItem[]>([])
 
   useEffect(() => {
-    if (city)
-      getWeather(city).then((data) => {
-        const tmpWeather = []
-        const chunk = 8
-        for (let i = 0; i < data.length; i += chunk)
-          tmpWeather.push(data.slice(i, i + chunk))
-        setWeather(tmpWeather)
-      })
+    if (!city) return
+    getWeather(city).then((data) => {
+      const tmpWeather = []
+      const chunk = 8
+      for (let i = 0; i < data.length; i += chunk)
+        tmpWeather.push(data.slice(i, i + chunk))
+      setWeather(tmpWeather)
+    })
+    saveHistory(city)
   }, [city])
 
   const handleCitySelect = (city: City) => {
