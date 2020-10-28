@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 const getHistory = () => {
   try {
-    return JSON.parse(localStorage.getItem(`history`) as string)
+    return JSON.parse(localStorage.getItem(`history`) as string) || []
   } catch {
     return []
   }
