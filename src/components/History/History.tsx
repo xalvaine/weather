@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Collapse, Pagination } from 'antd'
+import { Collapse, Form, Pagination, Switch } from 'antd'
 import { useTranslation } from 'react-i18next'
 import moment from 'moment'
 import { LocalStorageWeatherItem } from '../../types'
@@ -23,19 +23,27 @@ const History = () => {
   const [content, setContent] = useState<LocalStorageWeatherItem[]>([])
   const [itemsCount, setItemsCount] = useState<number>()
   const [page, setPage] = useState<number>(1)
+  const [oldestFirst, setOldestFirst] = useState(false)
 
   useEffect(() => {
-    setContent(getHistory())
+    setContent(getHistory().slice(0, 10))
     setItemsCount(getHistory().length)
   }, [])
 
-  const handlePageChange = (page: number, pageSize: number = 10) => {
-    setContent(getHistory().slice(pageSize * (page - 1), pageSize * page))
-    setPage(page)
+  useEffect(() => {
+    handlePageChange(page, oldestFirst)
+  }, [page, oldestFirst])
+
+  const handlePageChange = (page: number, oldestFirst: boolean) => {
+    const data = oldestFirst ? getHistory().reverse() : getHistory()
+    setContent(data.slice(10 * (page - 1), 10 * page))
   }
 
   return (
     <>
+      <Form.Item className={styles.switch} label="Сначала старые">
+        <Switch onChange={(value) => setOldestFirst(value)} />
+      </Form.Item>
       <Collapse ghost className={styles.wrapper}>
         {content.map((weatherItem) => (
           <Collapse.Panel
@@ -51,7 +59,7 @@ const History = () => {
       <Pagination
         total={itemsCount}
         current={page}
-        onChange={handlePageChange}
+        onChange={(page) => setPage(page)}
         className={styles.pagination}
       />
     </>

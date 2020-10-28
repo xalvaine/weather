@@ -14,5 +14,7 @@
   "Prague": "Прага",
   "Riga": "Рига",
   "Rome": "Рим",
-  "Cities not found": "Города не найдены"
+  "Cities not found": "Города не найдены",
+  "Newest first": "Сначала новые",
+  "Oldest first": "Сначала старые"
 }
